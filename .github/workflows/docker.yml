@@ -4,7 +4,6 @@ on: push
 env:
     CONTAINER_REGISTRY: docker.io
     Image_Name: Hello-World
-
 jobs:
     docker:
         runs-on: ubuntu-latest
@@ -12,18 +11,18 @@ jobs:
         steps:
             - name: Docker Build
              
-             run: echo docker build -t $CONTAINER_REGISTRY/${{ vars.Docker_UN}}/$Image_name:latest
+              run: echo docker build -t $CONTAINER_REGISTRY/${{ vars.Docker_UN}}/$Image_name:latest
             
-            - name: Docker Login
+              - name: Docker Login
+               
+              run: echo docker login --username=${{ vars.Docker_UN }} --password=${{ secrets.Docker_PW }}
             
-             run: echo docker login --username=${{ vars.Docker_UN }} --password=${{ secrets.Docker_PW }}
+             - name: Docker publish
             
-            - name: Docker publish
-            
-             run: echo docker push $CONTAINER_REGISTRY/$Docker_UN/$Image_Name:latest
+              run: echo docker push $CONTAINER_REGISTRY/$Docker_UN/$Image_Name:latest
 
     deploy:
-        Needs: docker
+        needs: docker
         runs-on: ubuntu-latest
         steps:
             - name: docker run
